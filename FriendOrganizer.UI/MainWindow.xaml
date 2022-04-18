@@ -16,6 +16,9 @@
         <DataTemplate DataType="{x:Type viewModel:MeetingDetailViewModel}">
             <view:MeetingDetailView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ProgrammingLanguageDetailViewModel}">
+            <view:ProgrammingLanguageDetailView/>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -33,11 +36,30 @@
                 <MenuItem Header="New Meeting" Command="{Binding CreateNewDetailCommand}"
                           CommandParameter="{x:Type viewModel:MeetingDetailViewModel}"/>
             </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Programming Languages"
+                          Command="{Binding OpenSingleDetailViewCommand}"
+                          CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}"/>
+            </MenuItem>
         </Menu>
         <view:NavigationView Grid.Row="1" 
                              DataContext="{Binding NavigationViewModel}"/>
-        <ContentControl Grid.Row="1"
-                        Grid.Column="1"
-                        Content="{Binding DetailViewModel}"/>
+        <TabControl Grid.Row="1" Grid.Column="1"
+                    ItemsSource="{Binding DetailViewModels}"
+                    SelectedItem="{Binding SelectedDetailViewModel, Mode=TwoWay}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Title}"/>
+                        <TextBlock Text="*" Visibility="{Binding HasChanges,
+                            Converter={StaticResource booleanToVisibillityConverter}}"/>
+                        <Button Content="x" FontSize="20"
+                                VerticalContentAlignment="Top" Margin="2"
+                                Command="{Binding CloseDetailViewCommand}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+                    
     </Grid>
 </Window>

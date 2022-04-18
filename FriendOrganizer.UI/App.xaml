@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:FriendOrganizer.UI"
              Startup="Application_Startup">
     <Application.Resources>
+        <BooleanToVisibilityConverter x:Key="booleanToVisibillityConverter"/>
         <Style TargetType="TextBox">
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
