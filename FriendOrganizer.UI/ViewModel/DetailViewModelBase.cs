@@ -89,7 +89,7 @@ namespace FriendOrganizer.UI.ViewModel
             if (HasChanges)
             {
                 var result = MessageDialogService.ShowOkCancelDialog("You've made changes. Close this item?", "Question");
-                if(result == MessageDialogResult.Cancel)
+                if (result == MessageDialogResult.Cancel)
                 {
                     return;
                 }
@@ -99,6 +99,14 @@ namespace FriendOrganizer.UI.ViewModel
                 .Publish(new AfterDetailClosedEventArgs
                 {
                     Id = Id,
+                    ViewModelName = this.GetType().Name
+                });
+        }
+        protected virtual void RaiseCollectionSavedEvent()
+        {
+            EventAggregator.GetEvent<AfterCollectionSavedEvent>()
+                .Publish(new AfterCollectionSavedEventArgs
+                {
                     ViewModelName = this.GetType().Name
                 });
         }
