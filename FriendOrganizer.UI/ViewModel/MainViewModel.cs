@@ -61,10 +61,20 @@ namespace FriendOrganizer.UI.ViewModel
         {
             var detailViewModel = DetailViewModels
                 .SingleOrDefault(vm => vm.Id == args.Id && vm.GetType().Name == args.ViewModelName);
-            if(detailViewModel == null)
+            if (detailViewModel == null)
             {
                 detailViewModel = _detailViewModelCreator[args.ViewModelName];
-                await detailViewModel.LoadAsync(args.Id);
+                try
+                {
+                    await detailViewModel.LoadAsync(args.Id);
+                }
+                catch
+                {
+                    await _messageDialogService.ShowInfoDialogAsync("Could not load the entity,maybe it was deleted in the meantime" +
+                        "by another user. The navigation is refreshed for you");
+                    await NavigationViewModel.LoadAsync();
+                    return;
+                }
                 DetailViewModels.Add(detailViewModel);
             }
 
@@ -95,7 +105,7 @@ namespace FriendOrganizer.UI.ViewModel
             var detailViewModel = DetailViewModels
                             .SingleOrDefault(vm => vm.Id == id && vm.GetType().Name == viewModelName);
             if (detailViewModel != null)
-                    DetailViewModels.Remove(detailViewModel);
+                DetailViewModels.Remove(detailViewModel);
         }
     }
 }
